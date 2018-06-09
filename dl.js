@@ -1,3 +1,7 @@
+/*
+ * HorribleSubs Torrent to Transmission Downloader
+ * Edited by leetdavid
+ */
 var request = require('request');
 var Transmission = require('transmission');
 var fs = require('fs');
@@ -22,14 +26,14 @@ super_read({
     "Anime Name (horriblesubs.info/shows/XXX): ": {},
     "Last Episode Downloaded (0 for none, defaults to 0): ": {},
     "Transmission URL/Hostname (default localhost): ": {},
-    "Transmission Port (80 default): ": {},
+    "Transmission Port (9091 default): ": {},
     "Transmission Webclient Username: ": {},
     "Transmission Webclient Password: ": {
         'silent': true
     },
     "Transmission Download Path (Defaults to transmission default): ": {}
 }, function(showname, last_downloaded, host, port, user, pass, transpath) {
-    if (!port) port = 80;
+    if (!port) port = 9091;
     if (!last_downloaded) last_downloaded = 0;
     if (!host) host = 'localhost';
     var transmission = new Transmission({
@@ -76,7 +80,8 @@ parse = function($, transmission, showname, last_downloaded, url, needmoreid, tr
         bestQuality = $(this).nextUntil('.release-info').last();
         href = bestQuality.find('a').attr('href');
         name = bestQuality.attr('class').split(' ')[1];
-        qname = name.split(showname)[1];
+        qname = name.replace('---','-').replace('--', '-').split(showname)[1];
+        console.log(`${name} ${showname} ${qname}`);
         while(qname.charAt(0) == '-') qname = qname.substr(1);
         epnum = qname.split('-')[0];
         opts = {};
